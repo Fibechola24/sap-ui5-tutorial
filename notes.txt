@@ -32,3 +32,13 @@ Step 2: Bootstrapping
 
 --> update the ui5	 cli settings
 
+
+
+87.05
+87,65 Eur or USD
+
+
+{= ... }
+comparison, logical operators, ternary expressions, math operations
+
+{= ${invoice>ExtendedPrice} > 50 ? 'Error' : 'Success' }
