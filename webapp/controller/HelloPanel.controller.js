@@ -1,28 +1,31 @@
 sap.ui.define([
-   "sap/ui/core/mvc/Controller",
-   "sap/m/MessageToast"
+	"sap/ui/core/mvc/Controller",
+	"sap/m/MessageToast"
 ], (Controller, MessageToast) => {
-   "use strict";
+	"use strict";
 
-   return Controller.extend("ui5.walkthrough.controller.HelloPanel", {
+	return Controller.extend("ui5.walkthrough.controller.HelloPanel", {
+		onShowHello() {
+			// read msg from i18n model
+			const oBundle = this.getView().getModel("i18n").getResourceBundle();
+			const sRecipient = this.getView().getModel().getProperty("/recipient/name");
+			const sMsg = oBundle.getText("helloMsg", [sRecipient]);
 
-       onShowHello() {
-           // read msg from i18n model
-           const oBundle = this.getView().getModel("i18n").getResourceBundle();
-           const sRecipient = this.getView().getModel().getProperty("/recipient/name");
-           const sMsg = oBundle.getText("helloMsg", [sRecipient]);
+			MessageToast.show(sMsg);
+		},
 
-           MessageToast.show(sMsg);
-       },
+		async onOpenDialog() {
+			// create dialog lazily
+			this.oDialog ??= await this.loadFragment({
+				name: "ui5.walkthrough.view.HelloDialog"
+			});
 
-       async onOpenDialog() {
-           // create dialog lazily (only when needed)
-           this.oDialog ??= await this.loadFragment({
-               name: "ui5.walkthrough.view.HelloDialog"
-           });
+			this.oDialog.open();
+		},
 
-           // open it
-           this.oDialog.open();
-       }
-   });
+		onCloseDialog() {
+			// We simply close the dialog instance by ID
+			this.byId("helloDialog").close();
+		}
+	});
 });
